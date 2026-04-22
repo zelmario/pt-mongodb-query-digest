@@ -1,0 +1,26 @@
+# Built binary at repo root
+/pt-mongodb-query-digest
+
+# Go build artifacts
+*.exe
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+coverage.out
+coverage.html
+
+# Local SQLite history (default + WAL/SHM sidecars)
+*.db
+*.db-shm
+*.db-wal
+
+# Editor / OS
+*.swp
+.vscode/
+.idea/
+.DS_Store
+
+# Local tooling state
+.claude/

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>pt-mongodb-query-digest</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>{{.CSS}}</style>
+</head>
+<body>
+<header>
+  <h1>pt-mongodb-query-digest</h1>
+  <div class="meta">
+    <span><strong>Source:</strong> {{.Source}}</span>
+    <span><strong>Events:</strong> {{.TotalEvents}}</span>
+    <span><strong>Shapes:</strong> {{len .Classes}}</span>
+    <span><strong>Total:</strong> {{.TotalMsFmt}}</span>
+    {{if not .Earliest.IsZero}}
+    <span><strong>Range:</strong> {{.Earliest.Format "2006-01-02 15:04:05Z"}} — {{.Latest.Format "2006-01-02 15:04:05Z"}}</span>
+    {{end}}
+    <span class="spacer"></span>
+    <span class="gen">Generated {{.GeneratedAt.Format "2006-01-02 15:04:05Z07:00"}}</span>
+  </div>
+</header>
+
+<section class="filters">
+  <input id="search" type="search" placeholder="search namespace, shape, flag…" autocomplete="off">
+  <select id="op-filter"><option value="">All ops</option></select>
+  <select id="flag-filter">
+    <option value="">All flags</option>
+    <option value="collscan">collscan</option>
+    <option value="unanchored-regex">unanchored-regex</option>
+    <option value="large-in">large-in</option>
+    <option value="plan-flip">plan-flip</option>
+    <option value="where">where</option>
+    <option value="negation">negation</option>
+    <option value="unbounded-skip">unbounded-skip</option>
+  </select>
+  <select id="sort">
+    <option value="total">Sort: total time</option>
+    <option value="count">Sort: call count</option>
+    <option value="p95">Sort: p95</option>
+    <option value="max">Sort: max</option>
+    <option value="ratio">Sort: exam/return ratio</option>
+  </select>
+  <span id="result-count"></span>
+</section>
+
+<main>
+  <table id="classes">
+    <thead>
+      <tr>
+        <th>#</th><th>ID</th><th>Op</th><th>Namespace</th>
+        <th class="num">Calls</th><th class="num">Total</th>
+        <th class="num">p95/call</th><th class="num">Ratio</th>
+        <th>Flags</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+</main>
+
+<div id="detail-backdrop" hidden></div>
+<aside id="detail" hidden></aside>
+
+<script id="data" type="application/json">{{.JSON}}</script>
+<script>{{.JS}}</script>
+</body>
+</html>

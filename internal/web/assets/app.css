@@ -1,0 +1,116 @@
+:root {
+  --bg: #0f1115;
+  --panel: #181b22;
+  --panel-2: #222631;
+  --text: #e6e8ec;
+  --muted: #8b93a7;
+  --accent: #6ab0ff;
+  --border: #2a2f3a;
+  --bad: #ff7a7a;
+  --warn: #ffc555;
+  --ok: #7fd88c;
+  --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: light) {
+  :root {
+    --bg: #ffffff; --panel: #f6f7f9; --panel-2: #eceff4;
+    --text: #1b1e24; --muted: #65707f; --accent: #1f6feb;
+    --border: #dde1e8; --bad: #c83737; --warn: #a26b00; --ok: #1a7f37;
+  }
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0; padding: 0; background: var(--bg); color: var(--text);
+  font: 14px/1.45 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+header {
+  padding: 16px 24px; border-bottom: 1px solid var(--border);
+  background: var(--panel);
+}
+header h1 { margin: 0 0 6px; font-size: 18px; font-weight: 600; }
+.meta { color: var(--muted); font-size: 13px; display: flex; flex-wrap: wrap; gap: 18px; }
+.meta .spacer { flex: 1; }
+.meta strong { color: var(--text); font-weight: 500; }
+.filters {
+  padding: 12px 24px; background: var(--panel);
+  border-bottom: 1px solid var(--border);
+  display: flex; gap: 10px; align-items: center; flex-wrap: wrap;
+}
+.filters input, .filters select {
+  background: var(--panel-2); color: var(--text);
+  border: 1px solid var(--border); border-radius: 6px;
+  padding: 6px 10px; font-size: 13px;
+}
+.filters input { flex: 1; min-width: 200px; }
+.filters select { min-width: 140px; }
+#result-count { color: var(--muted); font-size: 12px; margin-left: auto; }
+main { padding: 12px 24px; }
+table { width: 100%; border-collapse: collapse; font-size: 13px; }
+thead th {
+  text-align: left; padding: 8px 10px; font-weight: 600;
+  color: var(--muted); border-bottom: 1px solid var(--border);
+  position: sticky; top: 0; background: var(--bg);
+}
+tbody tr {
+  border-bottom: 1px solid var(--border); cursor: pointer;
+}
+tbody tr:hover { background: var(--panel); }
+tbody td { padding: 8px 10px; vertical-align: top; }
+td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
+td.id { font-family: var(--mono); color: var(--muted); }
+.badge {
+  display: inline-block; padding: 1px 7px; margin: 0 4px 2px 0;
+  border-radius: 10px; font-size: 11px; font-family: var(--mono);
+  background: var(--panel-2); color: var(--bad);
+  border: 1px solid var(--border);
+}
+.badge.warn { color: var(--warn); }
+.op {
+  display: inline-block; font-family: var(--mono); font-size: 11px;
+  padding: 1px 6px; border-radius: 3px; background: var(--panel-2);
+  color: var(--accent);
+}
+#detail-backdrop {
+  position: fixed; inset: 0; background: rgba(0,0,0,.5); z-index: 10;
+}
+#detail {
+  position: fixed; top: 0; right: 0; bottom: 0; width: min(720px, 100%);
+  background: var(--bg); border-left: 1px solid var(--border);
+  padding: 24px; overflow-y: auto; z-index: 11;
+  box-shadow: -2px 0 20px rgba(0,0,0,.3);
+}
+#detail h2 { margin-top: 0; font-size: 16px; display: flex; align-items: center; gap: 10px; }
+#detail .close {
+  background: none; border: 1px solid var(--border); color: var(--text);
+  padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 12px;
+}
+#detail .close:hover { background: var(--panel); }
+#detail .kv { display: grid; grid-template-columns: max-content 1fr; gap: 4px 16px; font-size: 13px; margin: 14px 0; }
+#detail .kv dt { color: var(--muted); }
+#detail .kv dd { margin: 0; font-family: var(--mono); font-size: 12px; }
+#detail pre {
+  background: var(--panel); padding: 12px; border-radius: 6px;
+  font-family: var(--mono); font-size: 12px; overflow-x: auto;
+  border: 1px solid var(--border); line-height: 1.5;
+}
+#detail h3 { font-size: 13px; color: var(--muted); margin: 18px 0 6px; font-weight: 500; text-transform: uppercase; letter-spacing: .03em; }
+.flag-card {
+  padding: 10px 12px; margin: 6px 0; border: 1px solid var(--border);
+  border-radius: 6px; background: var(--panel);
+}
+.flag-card .name { font-family: var(--mono); color: var(--bad); font-size: 12px; }
+.flag-card .title { font-weight: 600; margin: 2px 0; }
+.flag-card .why { color: var(--muted); margin: 4px 0; }
+.flag-card .fix { font-style: italic; font-size: 12px; color: var(--text); }
+.hist {
+  display: grid; grid-template-columns: 60px 1fr 40px; gap: 4px;
+  align-items: center; font-family: var(--mono); font-size: 11px;
+}
+.hist .label { color: var(--muted); text-align: right; }
+.hist .bar {
+  height: 10px; background: var(--accent); border-radius: 2px; min-width: 1px;
+}
+.hist .count { color: var(--muted); text-align: right; }
+.hint {
+  color: var(--muted); font-size: 12px; padding: 20px; text-align: center;
+}
