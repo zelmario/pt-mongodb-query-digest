@@ -109,9 +109,16 @@ func runLog(pctx context.Context, path string, o *logOpts) error {
 		if !ef.Keep(ev) {
 			continue
 		}
-		ev.Op, _, ev.Shape = fingerprint.Canonicalize(ev.Command)
+		var coll string
+		ev.Op, coll, ev.Shape = fingerprint.Canonicalize(ev.Command)
 		if ev.Op == "" {
 			continue
+		}
+		// MongoDB logs batch writes with ns="<db>.$cmd"; the real collection
+		// is the value of the op key inside the command body. Prefer that.
+		if coll != "" && strings.HasSuffix(ev.Namespace, ".$cmd") {
+			ev.Namespace = ev.Database + "." + coll
+			ev.Collection = coll
 		}
 		// Filter by op here (after fingerprinting establishes the op).
 		if len(ef.Ops) > 0 {

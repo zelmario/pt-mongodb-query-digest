@@ -52,13 +52,46 @@ var extJSONWrappers = map[string]bool{
 	"$regularExpression": true,
 }
 
-// Top-level command fields that are request metadata, not shape.
+// Top-level command fields that are request metadata, not shape. Anything in
+// here is stripped before the canonical shape is produced, so a predicate like
+// `{find: "x", filter: {a: 1}, shardVersion: {...}, lsid: ...}` reduces to
+// `{filter: {a: "?"}}`. Keep this conservative: skip genuine plumbing, not
+// things a reader would want to see in the shape.
 var skipFields = map[string]bool{
-	"$db": true, "lsid": true, "$clusterTime": true, "txnNumber": true,
-	"$readPreference": true, "$audit": true, "comment": true,
-	"ordered": true, "batchSize": true, "maxTimeMS": true,
-	"autocommit": true, "apiVersion": true, "apiStrict": true,
-	"apiDeprecationErrors": true, "readConcern": true, "writeConcern": true,
+	// session / txn / routing plumbing
+	"$db":                    true,
+	"lsid":                   true,
+	"$clusterTime":           true,
+	"$configTime":            true,
+	"$topologyTime":          true,
+	"txnNumber":              true,
+	"txnRetryCounter":        true,
+	"autocommit":             true,
+	"startTransaction":       true,
+	"stmtId":                 true,
+	"stmtIds":                true,
+	"clientOperationKey":     true,
+	// driver / client metadata injected by mongos
+	"$client":                true,
+	// sharded-cluster routing
+	"shardVersion":           true,
+	"databaseVersion":        true,
+	// concerns / preferences / auditing
+	"$readPreference":        true,
+	"$audit":                 true,
+	"readConcern":            true,
+	"writeConcern":           true,
+	// behavioral toggles that don't change the shape
+	"bypassDocumentValidation": true,
+	"mayBypassWriteBlocking":   true,
+	"ordered":                  true,
+	"batchSize":                true,
+	"maxTimeMS":                true,
+	"comment":                  true,
+	// API versioning
+	"apiVersion":           true,
+	"apiStrict":            true,
+	"apiDeprecationErrors": true,
 }
 
 func identifyOp(cmd map[string]any) (op, coll string) {

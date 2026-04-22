@@ -111,9 +111,14 @@ func runProfile(pctx context.Context, uri string, o *profileOpts) error {
 		if !ef.Keep(ev) {
 			continue
 		}
-		ev.Op, _, ev.Shape = fingerprint.Canonicalize(ev.Command)
+		var coll string
+		ev.Op, coll, ev.Shape = fingerprint.Canonicalize(ev.Command)
 		if ev.Op == "" {
 			continue
+		}
+		if coll != "" && strings.HasSuffix(ev.Namespace, ".$cmd") {
+			ev.Namespace = ev.Database + "." + coll
+			ev.Collection = coll
 		}
 		if len(ef.Ops) > 0 {
 			if _, ok := ef.Ops[ev.Op]; !ok {
